@@ -1,0 +1,138 @@
+<% layout('layouts/boilerplate.ejs') -%>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    #auth-page-container {
+        font-family: 'Poppins', sans-serif;
+        background-size: cover;
+        background-position: center;
+        min-height: calc(100vh - 56px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+        transition: background-image 1s ease-in-out;
+    }
+
+    .auth-card {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        padding: 40px;
+        color: #fff;
+    }
+
+    .auth-card h1, .form-label { color: #fff; }
+
+    .form-control {
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 0;
+        color: #fff !important;
+    }
+    .form-control::placeholder { color: rgba(255, 255, 255, 0.7); }
+    .form-control:focus {
+        box-shadow: none;
+        border-bottom-color: #fff;
+    }
+
+    .invalid-feedback { color: #ffcccc; font-weight: bold; }
+
+    .auth-btn {
+        background: #fff;
+        color: #333;
+        font-weight: 600;
+        border-radius: 25px;
+        border: none;
+    }
+    .auth-link {
+        color: #fff;
+        text-align: center;
+        display: block;
+        margin-top: 1.5rem;
+        text-decoration: none;
+    }
+    .auth-like-holder{
+        display: flex;
+        flex-direction: start;
+        margin-left: 2rem;
+    }
+    .form-control{
+        background: none !important;
+           border-radius: 2rem !important;
+    }
+    .search-inp{
+         background-color:#0f110a !important;
+        opacity: 0.5!important;
+       
+    }
+    .captoins{
+    margin-bottom: 2rem;
+    }
+</style>
+
+<div id="auth-page-container">
+    <div class="col-md-6 col-xl-4">
+        <div class="auth-card">
+            <h2 class="captoins">Create an Account</h2>
+            <form method="POST" action="/signup" novalidate class="needs-validation">
+                <div class="mb-4">
+                    <label for="username" class="form-label"><b>Username</b></label>
+                    <input type="text" name="username" placeholder="Choose a username" class="form-control" id="username" required>
+                    <div class="invalid-feedback">Please choose a username.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="form-label"><b>Email</b></label>
+                    <input type="email" name="email" placeholder="Enter your email" class="form-control" id="email" required>
+                    <div class="invalid-feedback">Please enter a valid email.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label"><b>Password</b></label>
+                    <input type="password" name="password" placeholder="Create a password" class="form-control" id="password" required>
+                </div>
+
+                <button class="btn auth-btn w-100 mt-3 py-2">Sign Up</button>
+                <div class="auth-like-holder">
+                    <a href="/login" class="auth-link"></a>
+                    <a  class="auth-link">Already have an account?&nbsp;Login</a>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- <script>  change acording to tome
+  const hour = new Date().getHours();
+  const container = document.getElementById('auth-page-container');
+
+  let bgImage = '';
+
+  if (hour >= 6 && hour < 12) {
+    bgImage = 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?q=80&w=2072&auto=format&fit=crop'; // Morning houses
+  } else if (hour >= 12 && hour < 18) {
+    bgImage = 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2072&auto=format&fit=crop'; // Daytime street
+  } else {
+    bgImage = 'https://images.unsplash.com/photo-1560185008-c5f0eacdcf36?q=80&w=2072&auto=format&fit=crop'; // Night homes
+  }
+
+  container.style.backgroundImage = `url('${bgImage}')`;
+</script> -->
+<script>
+const images = [
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2072&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2072&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1560185008-c5f0eacdcf36?q=80&w=2072&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2072&auto=format&fit=crop'
+];
+document.getElementById('auth-page-container').style.backgroundImage =
+  `url('${images[Math.floor(Math.random()*images.length)]+1}')`;
+</script>
+
+
+ 

@@ -1,0 +1,174 @@
+
+body {
+    /* Google Font and Typography */
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 400; /* Default readable weight */
+    font-size: 1.1rem; /* Slightly larger base text size for better readability */
+    line-height: 1.6; /* Increased line-height for better text flow */
+    color: #212529; /* Dark gray for soft black text */
+    background-color: #f7f7f7; /* Light off-white background for a modern feel */
+
+    /* Flexbox Layout (Keeps footer at bottom) */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    
+    /* Reset default margin */
+    margin: 0; 
+}
+
+/* Ensure main content is flexible to push the footer down */
+.container {
+    flex-grow: 1;
+    padding-bottom: 2rem; /* Add breathing room above the footer */
+}
+
+/* ---------------------------------- */
+/* 3. Headings and Links              */
+/* ---------------------------------- */
+
+/* Apply a bolder weight to all headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Plus Jakarta Sans", sans-serif; /* Reiterate font for safety */
+    font-weight: 700; /* Bold weight for visual hierarchy */
+    color: #0b1a2a; /* Slightly darker color for contrast */
+}
+
+/* General link styling */
+a {
+    text-decoration: none; /* Remove underline from all links by default */
+    color: #4b6a9c; /* A soft blue that complements the travel/listing theme */
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #0d6efd; /* Standard Bootstrap blue on hover */
+}
+
+/* Remove margin from the last child within the body, useful for preventing extra space */
+body > *:last-child {
+    margin-bottom: 0;
+}
+
+.listing:hover{
+   border-radius: 1rem;
+  box-shadow: 1rem 1rem 2rem black;
+  /* margin-bottom: 1rem; */
+}
+
+.btn:hover{
+    
+  box-shadow: 0.5rem 0.5rem 0.5rem black;
+}
+.fa-house{
+ color:red;
+  font-size:xx-large;
+}
+.fa-compass{
+   color: #fe424d;
+   font-size: 2rem;
+}
+ 
+.container{
+   flex: 1;
+}
+ .navbar{
+    height: 5rem;
+    background-color: white;
+ }
+
+ .nav-link{
+   color:#222222 !important;
+ }
+ .f-info-links a{
+   text-decoration: none;
+   color: #222222;
+ }
+.f-info-links a:hover{
+   text-decoration: underline;
+}
+.f-info{
+   height:8rem;
+     background-color: #ebebeb;
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center; 
+  align-items: space-evenly;
+  text-align: center;
+}
+.f-info-socials i{
+   margin-right: 1rem;
+   font-size: 1.5rem;
+}
+.f-info-links,
+.f-info-socials,
+.f-info-brand  {
+   width: 100%;
+     vertical-align:middle ;
+     display: flex;
+     align-items: center;
+      justify-content: center;      
+}
+.f-info-links a{
+   margin-right: 1rem;
+}
+
+/* card */
+.listings-card{
+   border: none !important ;
+   margin-bottom: 2rem;
+}
+.card-img-top{
+   border-radius:1rem !important;
+   width: 100% !important;
+   object-fit: cover !important;
+}
+
+.card-body{
+   padding: 0 !important;
+}
+.card-text p{
+   font-weight: 400 !important;
+   color: #222222 !important;
+}
+.listing-link{
+   text-decoration: none;
+}
+.btn-light{
+   opacity:1 ;
+   font-weight:600 !important;
+   background-color: #ebebeb;
+   border: 2px solid black;
+   border-radius: 2rem !important;
+}
+
+/* new page  */
+.add-btn{
+   background-color: #fe424d !important;
+   border: none !important;
+   border-radius: 0.7rem !important;
+}
+/* Edit page*/
+.edit-btn{
+   background-color: #fe424d !important;
+   border: none !important;
+   border-radius: 0.7rem !important;
+}
+/* Show page*/
+.show-img{
+   height: 30vh;
+}
+.btns{
+   display: flex;
+}
+.show-card{
+   padding-left:0;
+   padding-right: 0;
+}
+
+/* Map */
+#map{
+   height: 400px;
+   width: 85vh;
+   border-radius:8px;
+}

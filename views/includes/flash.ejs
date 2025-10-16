@@ -1,0 +1,19 @@
+<!-- This must be in the EJS file that gets rendered after the redirect! -->
+
+<div class="row">
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+            <%= success[0] %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>  
+    <% } %>
+
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
+            <%= error[0] %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+</div>
+
+<!-- Rest of the page content goes here -->

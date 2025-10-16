@@ -1,0 +1,243 @@
+<% layout('layouts/boilerplate.ejs') -%>
+
+<style>
+  /* --- NEW --- */
+  body {
+    background-color: #F7F7F7; /* Soft, luxurious off-white background */
+  }
+
+  /* --- General & Best Practices --- */
+  :root {
+    --grey-border: #dddddd;
+    --dark-text: #222222;
+  }
+
+  .listings-card {
+    border: none;
+    margin-bottom: 2rem;
+  }
+
+  .listing-link {
+    text-decoration: none;
+  }
+  
+  .card-img-top {
+    border-radius: 1rem;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .card-body p {
+    font-weight: 500;
+  }
+
+  /* --- Professional Card Hover Effect --- */
+  .listings-card {
+    transition: transform 0.2s ease-in-out;
+  }
+  .listings-card:hover {
+    transform: scale(1.02);
+  }
+
+  /* --- Filter Bar Container --- */
+  .filters-container {
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+  }
+  
+  /* --- Filter Carousel Customization --- */
+  .carousel-container {
+    max-width: 100%;
+    position: relative;
+  }
+
+  .filter {
+    text-align: center;
+    margin: 0 1rem;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .filter:hover {
+    opacity: 1;
+  }
+  .filter i {
+    font-size: 1.5rem;
+  }
+  .filter p {
+    font-size: 0.8rem;
+    white-space: nowrap; /* Prevents text like "Iconic City" from breaking */
+  }
+
+  /* --- Carousel Controls --- */
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: auto;
+    background: none;
+    opacity: 1;
+  }
+  .carousel-control-prev { left: -1rem; }
+  .carousel-control-next { right: -1rem; }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-image: none !important;
+    background-color: #ffffff;
+    border: 1px solid var(--grey-border);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .carousel-control-prev:hover .carousel-control-prev-icon,
+  .carousel-control-next:hover .carousel-control-next-icon {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .carousel-control-prev-icon::before,
+  .carousel-control-next-icon::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--dark-text); /* Black chevron */
+    font-size: 0.8rem;
+  }
+  .carousel-control-prev-icon::before { content: "\f053"; }
+  .carousel-control-next-icon::before { content: "\f054"; }
+
+  /* --- Tax Toggle Switch --- */
+  .tax-switch {
+    border: 1px solid var(--grey-border);
+    border-radius: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    background-color: #FFFFFF; /* Ensure switch background is white */
+  }
+  .tax-switch .form-check-input {
+    border: 1px solid var(--dark-text);
+  }
+  .tax-switch .form-check-label {
+    padding-left: 0.75rem;
+  }
+
+  .tax-info {
+    display: none;
+  }
+
+  /* --- RESPONSIVE ADJUSTMENTS --- */
+  @media (max-width: 767.98px) {
+    .filters-container {
+      padding: 0.5rem 1rem;
+    }
+    .carousel-container {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .carousel-control-prev { left: -0.5rem; }
+    .carousel-control-next { right: -0.5rem; }
+    
+    .filter { margin: 0 0.5rem; }
+    .filter i { font-size: 1.2rem; }
+    .filter p { font-size: 0.7rem; }
+  }
+  .tax-switch{
+    
+    margin-top:-1.5rem !important;
+  }
+  .carousel-control-next-icon{
+    margin-right: 1rem !important;
+    height: 3rem !important;
+    margin-top:-1.5rem !important;
+  }
+  .carousel-control-prev-icon{
+    
+    height: 3rem !important;
+    margin-top:-1.5rem !important;
+  }
+  .form-check-input{
+    margin-left: 1rem !important;
+  }
+</style>
+<div>
+<div class="container-fluid filters-container d-flex align-items-center flex-column flex-md-row">
+  <div class="carousel-container flex-grow-1">
+    <div id="filterCarousel" class="carousel slide" data-bs-touch="false">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-around p-3">
+            <div class="filter text-center"><div><i class="fa-solid fa-fire"></i></div><p>Trending</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-bed"></i></div><p>Room</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-mountain-city"></i></div><p>Iconic city</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-mountain"></i></div><p>Mountain</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-globe"></i></div><p>Traveling</p></div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="d-flex justify-content-around p-3">
+            <div class="filter text-center"><div><i class="fa-brands fa-fort-awesome-alt"></i></div><p>Castles</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-person-swimming"></i></div><p>Amazing Pool</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-campground"></i></div><p>Camping</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-cow"></i></div><p>Farm</p></div>
+            <div class="filter text-center"><div><i class="fa-solid fa-lock"></i></div><p>Security</p></div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#filterCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#filterCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="form-check form-switch tax-switch ms-md-auto">
+    <label class="form-check-label" for="taxToggle">Display Tax's</label>
+    <input class="form-check-input" type="checkbox" role="switch" id="taxToggle">
+  </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-3">
+  <% for(let listing of allListings){ %>
+    <div class="col">
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card listings-card">
+          <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing-image" style="height: 20rem;">
+          <div class="card-img-overlay"></div>
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b> <br>
+              &#8377;<%= listing.price.toLocaleString("en-IN") %> / night
+              <span class="tax-info">&nbsp;+18% GST</span>
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  const taxSwitch = document.getElementById("taxToggle");
+  taxSwitch.addEventListener("click", () => {
+    let taxInfoElements = document.querySelectorAll(".tax-info");
+    for (info of taxInfoElements) {
+      if (info.style.display !== "inline") {
+        info.style.display = "inline";
+      } else {
+        info.style.display = "none";
+      }
+    }
+  });
+</script>

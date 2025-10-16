@@ -1,0 +1,80 @@
+/* This is the main container that holds the galaxy background */
+.auth-container {
+    /* Full-screen background that breaks out of the default ".container" padding */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    
+    /* Background Image from Unsplash */
+    background-image: url('https://images.unsplash.com/photo-1538356453527-2c5d6c97a8e2?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-attachment: fixed; /* Makes the background stay in place on scroll */
+    background-position: center;
+    
+    /* Center the form card vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem; /* Add some padding for smaller screens */
+    min-height: calc(100vh - 122px); /* Adjust 122px to be your navbar + footer height */
+}
+
+/* Glassmorphism Card Style for both login and signup */
+.auth-card {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 40px;
+    color: #fff; /* White text for readability on the dark background */
+}
+
+/* Style for text inside the card */
+.auth-card h1,
+.auth-card .form-label {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Transparent Input Fields */
+.auth-card .form-control {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 0;
+    color: #fff !important; /* Override Bootstrap's default text color */
+    font-size: 16px;
+}
+
+.auth-card .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.auth-card .form-control:focus {
+    box-shadow: none;
+    border-bottom-color: #fff;
+}
+
+/* Custom Validation Feedback color for dark background */
+.auth-card .invalid-feedback {
+    color: #ffcccc;
+    font-weight: bold;
+}
+
+/* Custom Button Style */
+.auth-card .auth-btn {
+    background: #fff;
+    color: #333;
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+.auth-card .auth-btn:hover {
+    transform: translateY(-2px);
+}

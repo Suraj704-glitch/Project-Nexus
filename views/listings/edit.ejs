@@ -1,0 +1,135 @@
+<% layout('layouts/boilerplate.ejs') -%>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+  body {
+    background: linear-gradient(135deg, #eef2f3, #8e9eab);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .edit-container {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .edit-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  }
+
+  .edit-container h3 {
+    text-align: center;
+    font-weight: 600;
+    color: #2b2d42;
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    font-weight: 500;
+    color: #495057;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="file"],
+  textarea {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    transition: 0.3s ease;
+  }
+
+  input:focus, textarea:focus {
+    border-color: #2b2d42;
+    box-shadow: 0 0 0 2px rgba(43, 45, 66, 0.2);
+  }
+
+  .edit-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #2b2d42, #4b6cb7);
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: 0.3s ease;
+  }
+
+  .edit-btn:hover {
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+  }
+
+  .invalid-feedback {
+    color: #d90429;
+    font-size: 0.8rem;
+  }
+
+  .note {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 1rem;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="edit-container">
+          <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+            <h3>Update Your Listing</h3>
+
+            <div class="mb-3">
+              <label for="title"><b>Title</b></label>
+              <input type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
+              <div class="invalid-feedback">Please enter a valid title.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="description"><b>Description</b></label>
+              <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+              <div class="invalid-feedback">Please provide a valid description.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="image"><b>Upload Listing Image</b></label>
+              <input type="file" name="listing[image]" value="<%= listing.image %>" class="form-control">
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="price"><b>Enter Price</b></label>
+                <input type="number" name="listing[price]" value="<%= listing.price %>" class="form-control" required>
+                <div class="invalid-feedback">Please enter a valid amount.</div>
+              </div>
+
+              <div class="col-md-8 mb-3">
+                <label for="country"><b>Country</b></label>
+                <input type="text" name="listing[country]" value="<%= listing.country %>" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="location"><b>City / Current Location</b></label>
+              <input type="text" name="listing[location]" value="<%= listing.location %>" class="form-control" required>
+            </div>
+
+            <button class="btn edit-btn mt-2"><b>Save Changes</b></button>
+
+            <p class="note">⚙️ All updates will be visible to current listing instantly.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
