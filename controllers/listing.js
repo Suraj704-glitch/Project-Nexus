@@ -11,7 +11,11 @@ const getCoordinates = require("../utils/geocode");
 
 const Listing=require("../models/listing.js");
 module.exports.index=async (req,res)=>{
- const allListings=await Listing.find({}) ;
+  // 1. Find ALL listings ({})
+    // 2. Ask MongoDB to .sort() them by price.
+    //    (price: 1) means ascending (lowest to highest).
+    //    (price: -1) would mean descending (highest to lowest).
+const allListings = await Listing.find({}).sort({ price: 1 });
   res.render("./listings/index.ejs",{allListings});
  };
 
