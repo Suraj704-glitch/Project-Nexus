@@ -55,6 +55,7 @@ module.exports.validateListing=(req,res,next)=>{
      }else{
       next();
      }
+     
 };
 
 
