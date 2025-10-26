@@ -37,9 +37,11 @@
     .mobile-search-bar .search-btn i{
         font-size: 1rem; /* Make sure icon is still visible */
     }
-.navbar{
-    z-index: 2000;
-}
+
+    .navbar{
+        z-index: 2000;
+    }
+
     /* STYLES FOR SCREEN SIZES BETWEEN 329px and 425px */
     @media (min-width: 329px) and (max-width: 425px) {
         /* Hide the brand icon to make more room */
@@ -61,60 +63,100 @@
             padding: 0.4rem 0.7rem;
         }
     }
+
     @media(max-width:329px){
          .navbar-brand.home {
             display: none;
         }
         .search-inp {
-           
-           width: 5rem;
-           
+
+            width: 5rem;
+
         }
-         
+
     }
+    /* --- Autocomplete Styles --- */
+    .autocomplete-wrapper {
+        position: relative;
+        flex-grow: 1; /* Allows the wrapper to expand */
+    }
+    .autocomplete-results {
+        position: absolute;
+        top: 100%; /* Position directly below the input */
+        left: 0;
+        right: 0; /* Match the width of the input's wrapper */
+        z-index: 1050; /* Ensure it appears above other content */
+        border: 1px solid rgba(0,0,0,.15);
+        border-top: none;
+        border-radius: 0 0 0.25rem 0.25rem;
+        background-color: #fff;
+        max-height: 200px; /* Limit height for long lists */
+        overflow-y: auto; /* Add scroll if needed */
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+        display: none; /* Hide by default */
+    }
+    .autocomplete-item {
+        display: block;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        color: #212529;
+        text-decoration: none;
+    }
+    .autocomplete-item:hover {
+        background-color: #e9ecef; /* Highlight effect */
+    }
+    /* --- End Autocomplete Styles --- */
 </style>
 
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
     <div class="container-fluid">
-        
+
         <a class="navbar-brand home" href="/listings"><i class="fa-solid fa-compass"></i></a>
 
-        <button class="navbar-toggler" type="button" 
-                data-bs-toggle="collapse" 
-                data-bs-target="#navbarNavAltMarkup" 
-                aria-controls="navbarNavAltMarkup" 
-                aria-expanded="false" 
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup"
+                aria-expanded="false"
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="mobile-search-bar d-flex d-md-none flex-grow-1 mx-2">
-            <form class="d-flex w-100" role="search" method="GET" action="/listings/search/location">
-                <input class="form-control search-inp" type="search" placeholder="Search" name="location" aria-label="Search"/>
-                <button class="btn search-btn ms-2" type="submit"><i class="fa-solid fa-search"></i></button>
-            </form>
+             <form class="d-flex w-100" role="search" method="GET" action="/listings/search">
+                 <div class="autocomplete-wrapper me-2">
+                       <input class="form-control search-inp" type="search" placeholder="Search"
+                              name="q" id="autocomplete-search-mobile"
+                              aria-label="Search" autocomplete="off"/>
+                       <div class="autocomplete-results" id="autocomplete-results-mobile"></div>
+                 </div>
+                 <button class="btn search-btn ms-2" type="submit"><i class="fa-solid fa-search"></i></button>
+             </form>
         </div>
-        
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav"> 
+            <div class="navbar-nav">
                 <a class="nav-link" href="/listings"> <div class="btn btn-success">Explore</div></a>
             </div>
-            
+
             <div class="navbar-nav ms-auto d-none d-md-flex">
-                <form class="d-flex" role="search" method="GET" action="/listings/search/location">
-                    <input class="form-control me-2 search-inp" type="search" placeholder="Search Destination" name="location" aria-label="Search"/>
+                <form class="d-flex" role="search" method="GET" action="/listings/search">
+                    <div class="autocomplete-wrapper me-2">
+                        <input class="form-control search-inp" type="search" name="q"
+                               placeholder="Search Destination or Title" id="autocomplete-search-desktop"
+                               aria-label="Search" autocomplete="off">
+                        <div class="autocomplete-results" id="autocomplete-results-desktop"></div>
+                    </div>
                     <button class="btn search-btn" type="submit">Search</button>
                 </form>
             </div>
-            
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="/listings/new"> <div class="btn btn-success">Create Listing</div></a>
-                
+
                 <% if(!currUser) { %>
                     <a class="nav-link" aria-current="page" href="/signup"><div class="btn btn-success"><b>Sign Up</b></div></a>
                     <a class="nav-link" href="/login"> <div class="btn btn-primary"><b>Login</b></div></a>
                 <% } %>
-                
+
                 <%if(currUser) {%>
                     <a class="nav-link" href="/logout"> <div class="btn btn-danger">LogOut</div></a>
                 <%}%>
@@ -122,3 +164,93 @@
         </div>
     </div>
 </nav>
+
+<script>
+    // Function to set up autocomplete for a given input and results container
+    function initializeAutocomplete(inputId, resultsId) {
+        const searchInput = document.getElementById(inputId);
+        const resultsWrapper = document.getElementById(resultsId);
+
+        if (!searchInput || !resultsWrapper) return; // Exit if elements don't exist
+
+        let debounceTimer; // Timer for delaying API calls
+
+        // Listen for input events on the search bar
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim(); // Get the typed query
+
+            clearTimeout(debounceTimer); // Reset the timer on each keystroke
+
+            // Only search if query is at least 1 character long
+            if (query.length < 1) {
+                resultsWrapper.innerHTML = ''; // Clear results
+                resultsWrapper.style.display = 'none'; // Hide container
+                return;
+            }
+
+            // Set a timer to wait 300ms after the user stops typing before making the API call
+            debounceTimer = setTimeout(async () => {
+                try {
+                    // Fetch suggestions from the backend API, encoding the query
+                    const response = await fetch(`/listings/autocomplete?q=${encodeURIComponent(query)}`);
+                    if (!response.ok) { throw new Error('Network response failed'); }
+                    const suggestions = await response.json(); // Parse the JSON response
+                    showSuggestions(suggestions, resultsWrapper, searchInput); // Display them
+                } catch (err) {
+                    console.error("Error fetching autocomplete:", err);
+                    resultsWrapper.innerHTML = ''; // Clear results on error
+                    resultsWrapper.style.display = 'none';
+                }
+            }, 300); // 300ms delay
+        });
+
+        // Add event listener to hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !resultsWrapper.contains(e.target)) {
+                 resultsWrapper.innerHTML = '';
+                 resultsWrapper.style.display = 'none';
+            }
+        });
+    }
+
+    // Function to display the fetched suggestions in the results container
+    function showSuggestions(suggestions, resultsWrapper, searchInput) {
+        if (!suggestions || suggestions.length === 0) {
+            resultsWrapper.innerHTML = ''; // No suggestions, clear and hide
+            resultsWrapper.style.display = 'none';
+            return;
+        }
+
+        // Create HTML for each suggestion item
+        const html = suggestions.map(s => {
+            // Escape quotes in the suggestion string for safe use in onclick attribute
+            const safeSuggestion = s.replace(/'/g, "\\'").replace(/"/g, '\\"');
+            // Each suggestion div calls selectSuggestion when clicked
+            return `<div class="autocomplete-item" onclick="selectSuggestion(this, '${searchInput.id}', '${resultsWrapper.id}')">${s}</div>`;
+        }).join(''); // Join all divs into a single string
+
+        resultsWrapper.innerHTML = html; // Put the HTML into the container
+        resultsWrapper.style.display = 'block'; // Make the container visible
+    }
+
+    // Function called when a suggestion item is clicked
+    function selectSuggestion(element, inputId, resultsId) {
+        const searchInput = document.getElementById(inputId);
+        const resultsWrapper = document.getElementById(resultsId);
+        if (searchInput) {
+            searchInput.value = element.textContent; // Fill the search input with the suggestion
+        }
+        if (resultsWrapper) {
+            resultsWrapper.innerHTML = ''; // Clear the suggestions list
+            resultsWrapper.style.display = 'none'; // Hide the suggestions container
+        }
+        // Optional: Automatically submit the form right after selecting
+        // searchInput.closest('form').submit();
+    }
+
+    // Run the initialization function for both search bars once the page content is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeAutocomplete('autocomplete-search-desktop', 'autocomplete-results-desktop');
+        initializeAutocomplete('autocomplete-search-mobile', 'autocomplete-results-mobile');
+    });
+</script>

@@ -20,7 +20,7 @@
   .listing-link {
     text-decoration: none;
   }
-  
+
   .card-img-top {
     border-radius: 1rem;
     width: 100%;
@@ -44,7 +44,7 @@
     padding: 0.5rem 0;
     margin-bottom: 1rem;
   }
-  
+
   /* --- Filter Carousel Customization --- */
   .carousel-container {
     max-width: 100%;
@@ -137,29 +137,30 @@
     }
     .carousel-container {
       width: 100%;
-      margin-bottom: 1rem;
+      margin-bottom: 1rem; 
     }
+    
   }
 
   @media (max-width: 420px) {
     .carousel-control-prev { left: -0.5rem; }
     .carousel-control-next { right: -0.5rem; }
-    
+
     .filter { margin: 0 0.5rem; }
     .filter i { font-size: 1.2rem; }
     .filter p { font-size: 0.7rem; }
   }
   .tax-switch{
-    
+
     margin-top:-1.5rem !important;
   }
   .carousel-control-next-icon{
-    margin-right: 1rem !important;
+    margin-right: 0.5rem !important;
     height: 3rem !important;
     margin-top:-1.5rem !important;
   }
   .carousel-control-prev-icon{
-    
+
     height: 3rem !important;
     margin-top:-1.5rem !important;
   }
@@ -167,6 +168,7 @@
     margin-left: 1rem !important;
   }
 </style>
+
 <div>
 <div class="container-fluid filters-container d-flex align-items-center flex-column flex-md-row">
   <div class="carousel-container flex-grow-1">
@@ -178,8 +180,11 @@
             <div class="filter text-center"><div><i class="fa-solid fa-bed"></i></div><p>Room</p></div>
             <div class="filter text-center"><div><i class="fa-solid fa-mountain-city"></i></div><p>Iconic city</p></div>
             <div class="filter text-center"><div><i class="fa-solid fa-mountain"></i></div><p>Mountain</p></div>
-            <div class="filter text-center"><div><i class="fa-solid fa-globe"></i></div><p>Traveling</p></div>
-          </div>
+            <div class="filter text-center" id="near-me-btn" style="cursor: pointer;">
+              <div><i class="fa-solid fa-location-crosshairs"></i></div>
+              <p>Near Me</p>
+            </div>
+            </div>
         </div>
         <div class="carousel-item">
           <div class="d-flex justify-content-around p-3">
@@ -213,12 +218,15 @@
     <div class="col">
       <a href="/listings/<%= listing._id %>" class="listing-link">
         <div class="card listings-card">
-          <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing-image" style="height: 20rem;">
+          <img src="<%= listing.image ? listing.image.url : '/img/default-listing.jpg' %>"
+               class="card-img-top"
+               alt="Listing image"
+               style="height: 20rem;">
           <div class="card-img-overlay"></div>
           <div class="card-body">
             <p class="card-text">
               <b><%= listing.title %></b> <br>
-              &#8377;<%= listing.price.toLocaleString("en-IN") %> / night
+              &#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : 'N/A' %> / night
               <span class="tax-info">&nbsp;+18% GST</span>
             </p>
           </div>
@@ -228,16 +236,92 @@
   <% } %>
 </div>
 
+<div class="row">
+    <div class="col-12 d-flex justify-content-center mt-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="/listings?page=<%= currentPage - 1 %>">Previous</a>
+                    </li>
+                <% } %>
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page <%= currentPage %> of <%= totalPages %></span>
+                </li>
+
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="/listings?page=<%= currentPage + 1 %>">Next</a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+    </div>
+</div>
+
 <script>
   const taxSwitch = document.getElementById("taxToggle");
-  taxSwitch.addEventListener("click", () => {
-    let taxInfoElements = document.querySelectorAll(".tax-info");
-    for (info of taxInfoElements) {
-      if (info.style.display !== "inline") {
-        info.style.display = "inline";
-      } else {
-        info.style.display = "none";
-      }
+  if (taxSwitch) {
+      taxSwitch.addEventListener("click", () => {
+        let taxInfoElements = document.querySelectorAll(".tax-info");
+        for (info of taxInfoElements) {
+          if (info.style.display !== "inline") {
+            info.style.display = "inline";
+          } else {
+            info.style.display = "none";
+          }
+        }
+      });
+  }
+</script>
+
+<script>
+    const nearMeButton = document.getElementById("near-me-btn");
+
+    if (nearMeButton) { // Check if the button exists
+        nearMeButton.addEventListener("click", () => {
+
+            if (!navigator.geolocation) {
+                alert("Geolocation is not supported by your browser.");
+                return;
+            }
+
+            console.log("Requesting user location...");
+            const nearMeText = nearMeButton.querySelector('p');
+            nearMeText.textContent = 'Finding...'; // Give user feedback
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    // Success!
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    console.log(`Location obtained: Lat=${latitude}, Lng=${longitude}`);
+
+                    // Redirect to the backend route with coordinates in the query string
+                    window.location.href = `/listings/nearme?lat=${latitude}&lng=${longitude}`;
+                },
+                (error) => {
+                    // Error getting location
+                    console.error("Error getting location:", error);
+                    let message = "Could not get your location.";
+                    if (error.code === error.PERMISSION_DENIED) {
+                        message = "You denied location access. Please enable it in your browser settings.";
+                    } else if (error.code === error.POSITION_UNAVAILABLE) {
+                        message = "Location information is unavailable.";
+                    } else if (error.code === error.TIMEOUT) {
+                        message = "The request to get user location timed out.";
+                    }
+                    alert(message);
+                    nearMeText.textContent = 'Near Me'; // Reset button text
+                },
+                { // Geolocation options
+                    enableHighAccuracy: true,
+                    timeout: 10000, // 10 seconds
+                    maximumAge: 0
+                }
+            );
+        });
     }
-  });
 </script>

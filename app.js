@@ -55,14 +55,7 @@
   app.use(passport.initialize());
   app.use(passport.session()); 
 
-  // ==================authenticate=======================
-  const LocalStrategy = require("passport-local");
-  passport.use(new LocalStrategy({ usernameField: "email" }, User.authenticate()));
-  passport.serializeUser(User.serializeUser());
-  passport.deserializeUser(User.deserializeUser());  
-
-
-  //=============================================
+ //=============================================
   // connect flash as middleware
   app.use((req, res, next) => {
     res.locals.success = req.flash("success");
@@ -74,6 +67,15 @@
 
   //==========================================================================
   
+
+  // ==================authenticate=======================
+  const LocalStrategy = require("passport-local");
+  passport.use(new LocalStrategy({ usernameField: "email" }, User.authenticate()));
+  passport.serializeUser(User.serializeUser());
+  passport.deserializeUser(User.deserializeUser());  
+
+
+ 
 
   const ExpressError=require("./utils/ExpressError.js");
   main().then(()=>{
